@@ -1,15 +1,22 @@
 import { renderPage } from './render-engine';
-import startPage from './start-page';
+import startPage from './views/start-page';
 import contactPage from './views/contact-page';
+import { createContact } from './contact-model';
 
 const pagesDictionary = {
 	startPage,
 	contactPage,
 };
 
+const fakeContact = {
+	name: 'Leffe',
+	emails: ['don_leffe@hotmail.se'],
+	number: ['0701485999'],
+};
+
 const state = {
 	view: 'startPage',
-	contacts: [],
+	contacts: [createContact(fakeContact)],
 };
 
 const handler = {
