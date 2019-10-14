@@ -101,9 +101,9 @@ function createNewContact() {
 
 	const name = document.getElementById('contact-name-input').value;
 
-	const numbers = Array.prototype.map.call(document.getElementsByClassName('contact-number-input'), element => element.value);
+	const numbers = Array.prototype.map.call(document.getElementsByClassName('contact-number-input'), element => element ? element.value : 'Missing');
 
-	const emails = Array.prototype.map.call(document.getElementsByClassName('contact-email-input'), element => element.value);
+	const emails = Array.prototype.map.call(document.getElementsByClassName('contact-email-input'), element => element ? element.value : 'Missing');
 
 	const contact = createContact({ name, numbers, emails });
 

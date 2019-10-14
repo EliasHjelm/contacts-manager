@@ -1,22 +1,21 @@
-import { createContact } from './contact-model';
 import { renderPage } from './render-engine';
-
-const fakeContact = {
-	name: 'Leffe',
-	emails: ['don_leffe@hotmail.se'],
-	numbers: ['07014859999', '0703471387', '08-123 145'],
-};
+import { saveContactsToLocalStorage } from './local-storage-handler';
 
 const state = {
 	view: 'startPage',
-	contacts: [createContact(fakeContact)],
+	contacts: [],
+	pageId: 1,
 };
+
+let pristine = true;
 
 const handler = {
 
 	set: function(object, property, newValue) {
 
 		if (property === 'view' && object[property] !== newValue) {
+
+			object.pageId++;
 
 			renderPage(newValue);
 
@@ -26,12 +25,27 @@ const handler = {
 
 		} else if (property === 'contacts') {
 
-            object[property] = newValue;
+			object[property] = newValue;
+
+			if (pristine) {
+
+				pristine = false;
+
+				return true;
+			}
+
+			object.pageId++;
 
 			// refresh
-            renderPage(object.view);
+			renderPage(object.view);
+
+			saveContactsToLocalStorage(newValue);
 
             return true;
+
+		} else {
+
+			return true;
 
 		}
 	},

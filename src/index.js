@@ -1,4 +1,9 @@
-import { renderPage } from './render-engine';
+import { readDataFromLocalStorage } from './local-storage-handler';
+import getPageFromUrl from './helpers/get-page-from-url';
 
-renderPage('startPage');
+readDataFromLocalStorage();
+
+getPageFromUrl();
+
+window.addEventListener('popstate', () => getPageFromUrl())
 

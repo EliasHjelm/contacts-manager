@@ -1,14 +1,13 @@
 import state from '../application-state'; 
 import { appendNodeWithText } from '../helpers/create-text-node';
 import { createElement } from '../helpers/create-element';
+import { deleteContact } from '../actions/delete-contact';
+import { navigate } from '../helpers/navigation-helper';
 
 function getContactsElements() {
-	
-	console.log('state', state);
 
 	return state.contacts.map((contact) => {
-
-		const { name, emails, numbers } = contact.latest;
+		const {id, latest: { name, emails, numbers } } = contact;
 
 		const contactElement = document.createElement('div');
 
@@ -32,6 +31,20 @@ function getContactsElements() {
 
 		contactElement.appendChild(numbersContainer);
 
+		appendNodeWithText(contactElement, 'button', 'Redigera', {
+			class: `edit-contact-button-${id}`,
+			handlers: {
+				click: () => navigate(`redigera-kontakt/${id}`),
+			},
+		});
+
+		appendNodeWithText(contactElement, 'button', 'Ta Bort', {
+			class: `delete-contact-button-${id}`,
+			handlers: {
+				click: () => deleteContact(id),
+			},
+		});
+
 		return contactElement;
 
 	});
@@ -39,7 +52,7 @@ function getContactsElements() {
 
 const handleCreateNewContactClick = () => {
 
-	state.view = 'newContactPage';
+	navigate('skapa-kontakt');
 
 };
 

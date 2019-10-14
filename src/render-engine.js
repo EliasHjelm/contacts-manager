@@ -1,17 +1,35 @@
 import startPage from './views/start-page';
 import contactPage from './views/contact-page';
 import newContactPage from './views/new-contact-page';
+import editContactPage from './views/edit-contact-page';
+import notFound from './views/not-found';
 
 const pagesDictionary = {
 	startPage,
 	contactPage,
 	newContactPage,
+	editContactPage,
 };
 
 const renderPage = (page) => {
-	console.log('Im gonna render page', page, 'from', pagesDictionary)
+
 	emptyBody();
-	document.body.appendChild(pagesDictionary[page]());
+
+	if (/edit-contact/.test(page)) {
+
+		document.body.appendChild(editContactPage());
+
+	} else if (pagesDictionary[page]) {
+
+		document.body.appendChild(pagesDictionary[page]());
+
+	} else {
+
+		document.body.appendChild(notFound());
+
+	}
+
+
 };
 
 const emptyBody = () => {

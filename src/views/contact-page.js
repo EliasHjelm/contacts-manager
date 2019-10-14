@@ -1,4 +1,4 @@
-const contactPage = (props) => {
+const contactPage = () => {
 
 	const contactPageContainer = document.createElement('div');
 
