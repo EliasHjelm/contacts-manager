@@ -2,7 +2,7 @@ import { renderPage } from './render-engine';
 import { saveContactsToLocalStorage } from './local-storage-handler';
 
 const state = {
-	view: 'startPage',
+	view: '',
 	contacts: [],
 	pageId: 1,
 };

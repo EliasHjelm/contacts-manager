@@ -1,10 +1,17 @@
-import { copyContact } from './helpers/copy-contact';
-
 const contactModel = {
-	
-	updateContact(props) {
 
-		this.revisions.push({ ...copyContact(this.latest), ...props });
+	updateContact(newContactData) {
+
+		if (this.latest !== this.current) {
+
+			// if we have went back in time, we must stay there when making new changes
+			this.revisions.length = this.revisions.indexOf(this.current) + 1;
+
+		}
+
+		this.revisions.push(newContactData);
+
+		this.current = this.latest;
 
 	},
 
@@ -34,10 +41,14 @@ function createContact(props) {
 
 		contact.revisions.push(props);
 
+		contact.current = props;
+
 	} else {
 
 		// we are importing a contact with existing history from localstorage
 		contact.revisions = props.revisions;
+
+		contact.current = contact.latest;
 
 	}
 

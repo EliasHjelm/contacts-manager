@@ -32,14 +32,14 @@ function getContactsElements() {
 		contactElement.appendChild(numbersContainer);
 
 		appendNodeWithText(contactElement, 'button', 'Redigera', {
-			class: `edit-contact-button-${id}`,
+			id: `edit-contact-button-${id}`,
 			handlers: {
 				click: () => navigate(`redigera-kontakt/${id}`),
 			},
 		});
 
 		appendNodeWithText(contactElement, 'button', 'Ta Bort', {
-			class: `delete-contact-button-${id}`,
+			id: `delete-contact-button-${id}`,
 			handlers: {
 				click: () => deleteContact(id),
 			},
@@ -72,7 +72,10 @@ const startPage = () => {
 
 	startPageContainer.appendChild(contactsContainer);
 
-	appendNodeWithText(startPageContainer, 'button', 'Ny kontakt', { class: 'new-contact-button', handlers: { click: handleCreateNewContactClick } });
+	appendNodeWithText(startPageContainer, 'button', 'Ny kontakt', {
+		id: 'new-contact-button',
+		handlers: { click: handleCreateNewContactClick }
+	});
 
 	return startPageContainer;
 };

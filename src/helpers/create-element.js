@@ -22,17 +22,17 @@ function createElement(tag, options) {
 
 			} else if (option === 'handlers') {
 
-				if (typeof options.class === 'string') {
+				if (typeof options.id === 'string') {
 
 					Object.keys(options[option]).forEach(event => {
 
-						addEventListener(event, options.class, options.handlers[event]);
+						addEventListener(event, options.id, options.handlers[event]);
 
 					});
 
 				} else {
 
-					throw new Error('Use exactly one classname for event handlers');
+					throw new Error('Use an ID for event handlers!');
 
 				}
 

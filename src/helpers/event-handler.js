@@ -12,7 +12,7 @@ function eventHandler(event) {
 
 			Object.keys(eventListeners[key][pageId]).forEach(target => {
 
-				if (event.target.classList.contains(target)) {
+				if (event.target.id === target) {
 
 					eventListeners[key][pageId][target].forEach(handler => {
 

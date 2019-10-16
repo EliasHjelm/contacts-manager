@@ -1,4 +1,5 @@
 import { renderPage } from '../render-engine';
+import state from '../application-state';
 
 function getPageFromUrl() {
 
@@ -17,15 +18,16 @@ function getPageFromUrl() {
 
         console.log('found contactId', contactId);
 
-        renderPage(`edit-contact-${contactId}`);
+        state.view = `edit-contact-${contactId}`
 
     } else if (pagesByUrl[pathname]) {
 
-        renderPage(pagesByUrl[pathname]);
+        state.view = pagesByUrl[pathname];
 
     } else {
 
-        renderPage('not found');
+        state.view = '404';
+
     }
 
 }

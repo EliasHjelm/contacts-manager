@@ -29,7 +29,7 @@ const newContactPage = () => {
 	});
 
 	appendNodeWithText(numbersContainer, 'button', '+', {
-		class: 'add-contact-number',
+		id: 'add-contact-number',
 		handlers: {
 			click: () => addNumberInput(numbersContainer),
 		},
@@ -46,14 +46,14 @@ const newContactPage = () => {
 	});
 
 	appendNodeWithText(emailsContainer, 'button', '+', {
-		class: 'add-email-button',
+		id: 'add-email-button',
 		handlers: {
 			click: () => addEmailInput(emailsContainer),
 		},
 	});
 
 	appendNodeWithText(contactPageContainer, 'button', 'Skapa Kontakt', {
-		class: 'create-contact-button',
+		id: 'create-contact-button',
 		handlers: {
 			click: createNewContact,
 		},
@@ -67,7 +67,7 @@ function addNumberInput(numbersContainer) {
 	const numberRow = appendNode(numbersContainer, 'div');
 
 	appendNodeWithText(numberRow, 'button', 'X', {
-		class: `remove-number-${idCounter++}`,
+		id: `remove-number-${idCounter++}`,
 		handlers: {
 			click: () => numbersContainer.removeChild(numberRow),
 		},
@@ -84,7 +84,7 @@ function addEmailInput(emailsContainer) {
 	const emailRow = appendNode(emailsContainer, 'div');
 
 	appendNodeWithText(emailRow, 'button', 'X', {
-		class: `remove-email-${idCounter++}`,
+		id: `remove-email-${idCounter++}`,
 		handlers: {
 			click: () => emailsContainer.removeChild(emailRow),
 		},
@@ -99,8 +99,9 @@ function addEmailInput(emailsContainer) {
 
 function createNewContact() {
 
-	const name = document.getElementById('contact-name-input').value;
+	const name = document.getElementById('contact-name-input') ? document.getElementById('contact-name-input').value : 'missing';
 
+	// the return value from getElementsByClassName is not an array, but is 'array-like' and can be mapped over like this
 	const numbers = Array.prototype.map.call(document.getElementsByClassName('contact-number-input'), element => element ? element.value : 'Missing');
 
 	const emails = Array.prototype.map.call(document.getElementsByClassName('contact-email-input'), element => element ? element.value : 'Missing');
