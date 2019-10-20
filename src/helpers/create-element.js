@@ -1,4 +1,4 @@
-import { addEventListener } from '../helpers/event-handler';
+import { addEventListener } from '../event-handler';
 
 function createElement(tag, options) {
 

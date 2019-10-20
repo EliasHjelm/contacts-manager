@@ -1,4 +1,4 @@
-import state from '../application-state';
+import state from './application-state';
 
 const eventListeners = {};
 
