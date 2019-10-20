@@ -20,19 +20,21 @@ function appendNodeWithText(target, tag, text, options) {
 
 		target.appendChild(nodeWithText);
 
+		return nodeWithText;
+
 	} else if (typeof text === 'object') {
+
+		const nodes = [];
 
 		text.forEach(text => {
 
-			appendNodeWithText(target, tag, text, options);
+			const node = appendNodeWithText(target, tag, text, options);
+
+			nodes.push(node);
 
 		});
 
-		if (text.length === 0) {
-
-			appendNodeWithText(target, tag, 'Saknas', options);
-
-		}
+		return nodes;
 
 	}
 

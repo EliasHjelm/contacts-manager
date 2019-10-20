@@ -6,16 +6,24 @@ function eventHandler(event) {
 
 	const { pageId } = state;
 
+	// loop through all registered event types...
 	Object.keys(eventListeners).forEach(key => {
 
+		// ... to check for a match in event type and page id...
 		if (key === event.type && eventListeners[key][pageId]) {
 
+			// ... then check all targets ...
 			Object.keys(eventListeners[key][pageId]).forEach(target => {
 
-				if (event.target.id === target) {
+				const targetElement = document.getElementById(target);
 
+				// ... to see if the event target === listener target, or the listener target contains the event target...
+				if ((event.target.id === target) || (targetElement && targetElement.contains(event.target))) {
+
+					// ... if so, for each registered handler ...
 					eventListeners[key][pageId][target].forEach(handler => {
 
+						// ... pass it the event and execute
 						handler(event);
 
 					});
@@ -32,9 +40,9 @@ function eventHandler(event) {
 
 function addEventListener(event, target, handler) {
 
-	// we could clean up handlers attached to old pageIds if we cared to
 	const { pageId } = state;
 
+	// make sure we are listening for the actual event
 	if (!eventListeners[event]) {
 
 		eventListeners[event] = {};
@@ -43,6 +51,7 @@ function addEventListener(event, target, handler) {
 
 	}
 
+	// make associate the handler with a pageid and a target
 	eventListeners[event][pageId] = eventListeners[event][pageId] || {};
 
 	eventListeners[event][pageId][target] = eventListeners[event][pageId][target] || [];

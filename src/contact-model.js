@@ -1,17 +1,34 @@
+import { generateRevisionDiff } from "./helpers/contact-helpers";
+import state from './application-state';
+
 const contactModel = {
 
 	updateContact(newContactData) {
 
+		const diff = generateRevisionDiff(this.current, newContactData);
+		
+		if (diff.equal) {
+			
+			// if both version were equal, don't update
+			return null;
+		}
+
 		if (this.latest !== this.current) {
 
 			// if we have went back in time, we must stay there when making new changes
-			this.revisions.length = this.revisions.indexOf(this.current) + 1;
+			this.revisions.length = this.activeIndex + 1;
 
 		}
 
+		newContactData.date = Date.now();
+		// generate diff against current version
+		newContactData.diff = diff
+
+		// add to revisions
 		this.revisions.push(newContactData);
 
-		this.current = this.latest;
+		// set as active
+		this.activeIndex = this.count - 1;
 
 	},
 
@@ -21,14 +38,18 @@ const contactModel = {
 
 	},
 
+	get current() {
+
+		return this.revisions[this.activeIndex];
+
+	},
+
 	get count() {
 
 		return this.revisions ? this.revisions.length : 0;
 
-	},
+	}
 };
-
-let idCounter = 1;
 
 function createContact(props) {
 
@@ -37,22 +58,35 @@ function createContact(props) {
 	// is a fresh contact
 	if (props.hasOwnProperty('name')) {
 
+		props.date = Date.now();
+
 		contact.revisions = [];
 
 		contact.revisions.push(props);
 
-		contact.current = props;
+		contact.activeIndex = 0;
+
+		contact.id = state.safeContactId;
 
 	} else {
 
 		// we are importing a contact with existing history from localstorage
-		contact.revisions = props.revisions;
 
-		contact.current = contact.latest;
+		// convert array of arrays back to map
+		props.revisions = props.revisions.map(revision => {
+
+			return {
+				...revision,
+				emails: new Map(revision.emails),
+				numbers: new Map(revision.numbers),
+			};
+
+		});
+
+		Object.assign(contact, props);
 
 	}
 
-	contact.id = idCounter++;
 
 	return contact;
 }

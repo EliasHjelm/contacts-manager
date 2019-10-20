@@ -1,11 +1,8 @@
-import { renderPage } from '../render-engine';
 import state from '../application-state';
 
 function getPageFromUrl() {
 
     const { pathname } = window.location;
-
-    console.log('stumbled upon', pathname)
 
     const pagesByUrl = {
         '/': 'startPage',
@@ -14,9 +11,8 @@ function getPageFromUrl() {
 
     if (/redigera-kontakt\/\d+/.test(pathname)) {
 
+        // get the contact id from url
         const contactId = pathname.match(/\d+/)[0];
-
-        console.log('found contactId', contactId);
 
         state.view = `edit-contact-${contactId}`
 

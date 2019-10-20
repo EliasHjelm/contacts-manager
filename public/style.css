@@ -1,0 +1,142 @@
+* {
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+body > div, body > form {
+    flex-grow: 1;
+    max-width: 900px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: 3px;
+}
+
+
+/* Diff classes */
+
+.diff-removed {
+    color: darkred;
+    text-decoration: line-through;
+}
+
+.diff-added {
+    background-color: #a2ffa2;
+}
+
+.diff-changed {
+    background-color: rgb(255, 227, 124)
+}
+
+/* Revision container classes */
+
+.revision-container {
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0.2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.revision-container:hover {
+    background-color: #eeeeee;
+    opacity: 0.9;
+}
+
+.revision-container-active {
+    opacity: 1;
+    background-color: #dddddd;
+    cursor: default;
+    border-bottom: 0;
+}
+
+/* Generic things */
+
+label {
+    display: block;
+    font-size: 1.5rem;
+    margin: 1rem 0 0.5rem;
+}
+
+h1 {
+    margin-top: 1rem;
+}
+
+.start-page-contact-container {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2)
+}
+
+input {
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0.2rem;
+    margin: 0.2rem 0;
+    outline: 0;
+}
+
+input:invalid {
+    border-color: rgba(200, 0, 0, 0.5);
+}
+
+input:valid {
+    border-color: rgba(0, 100, 0, 0.5);
+}
+
+/* Button styling */
+
+button {
+    cursor: pointer;
+    border-radius: 3px;
+    border: 0;
+}
+
+.big-button {
+    padding: 0.8rem 2rem;
+    margin: 3rem 0.5rem 1rem 0;
+}
+
+.button-small {
+    width: 23px;
+    margin-right: 0.3rem;
+}
+
+.button-medium {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem 1rem 0;
+}
+
+.button-green {
+    background-color: darkgreen;
+    color: white;
+    border: 1px solid darkgreen;
+}
+
+.button-green:hover {
+    background-color: lightgreen;
+    color: black;
+}
+
+.button-orange {
+    background-color: #d08224;
+    color: white;
+    border: 1px solid #d08224;
+}
+
+.button-orange:hover {
+    background-color: #ffe6c8;
+    color: black;
+}
+
+.button-red {
+    background-color: darkred;
+    color: white;
+    border: 1px solid darkred;
+}
+
+.button-red:hover {
+    background-color: rgb(255, 204, 204);
+    color: black;
+}

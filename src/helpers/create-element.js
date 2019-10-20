@@ -8,6 +8,7 @@ function createElement(tag, options) {
 
 		Object.keys(options).forEach(option => {
 
+			// special treatment for class ...
 			if (option === 'class') {
 
 				if (typeof options[option] === 'string') {
@@ -16,14 +17,17 @@ function createElement(tag, options) {
 
 				} else if (typeof options[option] === 'object') {
 
-					element.className = options[option].join(' ');
+					element.className = options[option].filter(className => typeof className === 'string').join(' ');
 
 				}
 
+				// ... and event handlers ...
 			} else if (option === 'handlers') {
 
-				if (typeof options.id === 'string') {
+				// first check that a valid id was supplied 
+				if (typeof options.id === 'string' && options.id.length > 0) {
 
+					// handlers should be an object where keys and events and properties are handler functions
 					Object.keys(options[option]).forEach(event => {
 
 						addEventListener(event, options.id, options.handlers[event]);
@@ -32,10 +36,11 @@ function createElement(tag, options) {
 
 				} else {
 
-					throw new Error('Use an ID for event handlers!');
+					throw new Error('Supply a valid ID when attaching event handlers to an element!');
 
 				}
 
+				// ... other attributes just set without questioning
 			} else {
 
 				element.setAttribute(option, options[option]);
@@ -60,4 +65,14 @@ function appendNode(target, tag, options) {
 
 }
 
-export { createElement, appendNode };
+function prependNode(target, tag, options) {
+
+	const element = createElement(tag, options);
+
+	target.prepend(element);
+
+	return element;
+
+}
+
+export { createElement, appendNode, prependNode };

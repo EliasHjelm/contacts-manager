@@ -1,9 +1,11 @@
 import state from '../application-state';
-import { createElement, appendNode } from '../helpers/create-element';
+import { createElement, appendNode, prependNode } from '../helpers/create-element';
 import { appendNodeWithText } from '../helpers/create-text-node';
+import { appendInputGroup, readFormData } from '../helpers/input-helpers';
+import updateContact from '../actions/update-contact';
+import { renderContactBasicView } from '../helpers/contact-helpers';
 
-let idCounter = 1;
-
+// ------ "TEMPLATE" --------
 const editContactPage = () => {
 
     const { pathname } = window.location;
@@ -14,9 +16,6 @@ const editContactPage = () => {
 
     const contact = state.contacts.find(contact => contact.id === Number(id));
 
-    console.log('found', contact, 'on id', id, 'from contacts', state.contacts)
-
-    
     if (!contact) {
 
         return document.createTextNode('Den kontakt du söker finns ej');
@@ -25,69 +24,151 @@ const editContactPage = () => {
 
         const { name, numbers, emails } = contact.current;
 
-        const editContactContainer = createElement('div');
+        const editContactForm = createElement('form');
 
-        appendNodeWithText(editContactContainer, 'label', 'Namn:', {
-            for: 'edit-contact-name',
-        });
-
-        appendNode(editContactContainer, 'input', {
-            value: name,
-            id: 'edit-contact-name',
-        });
-
-        const emailsContainer = appendNode(editContactContainer, 'div');
-
-        appendNodeWithText(emailsContainer, 'h2', 'E-post:');
-
-        appendNodeWithText(emailsContainer, 'button', '+', {
-            id: 'add-contact-email',
+        appendNodeWithText(editContactForm, 'a', 'Tillbaka', {
+            href: '/',
+            className: 'back-link',
+            id: 'back-link',
             handlers: {
-                click: () => addEmailInput(emailsContainer),
+                click: (event) => {
+                    event.preventDefault();
+                    window.history.back();
+                },
             },
         });
 
-        emails.forEach((email, index) => {
+        editContactForm.onsubmit = (event) => {
+            event.preventDefault();
+            readAndUpdateContact(contact);
+        };
 
-            const emailRow = appendNode(emailsContainer, 'div');
+        appendNodeWithText(editContactForm, 'h1', 'Redigera kontakt');
 
-            appendNodeWithText(emailRow, 'button', 'X', {
-                id: `remove-email-index-${index}`,
-                handlers: {
-                    click: () => emailsContainer.removeChild(emailRow),
-                },
-            });
+        appendNodeWithText(editContactForm, 'h3', 'Namn:', {
+            for: 'contact-name-input',
+        });
 
-            appendNode(emailRow, 'input', {
-                type: 'text',
-                value: email,
-                class: 'contact-email-input',
-            });
+        appendNode(editContactForm, 'input', {
+            value: name,
+            type: 'text',
+            id: 'contact-name-input',
+            required: true,
+            minlength: 1,
+            maxlength: 30,
+        });
 
-        })
+        // edit emails
+        const emailsContainer = appendNode(editContactForm, 'div');
 
-        return editContactContainer;
+        appendNodeWithText(emailsContainer, 'h3', 'E-post:');
+
+        let safeEmailId = emails.size ? Math.max( ...emails.keys() ) + 1 : 1;
+
+        for (let [id, email] of emails) {
+
+            appendInputGroup(emailsContainer, 'email', email, id);
+
+        }
+
+        appendNodeWithText(emailsContainer, 'button', '+', {
+            id: 'add-contact-email',
+            type: 'button',
+            class: [ 'button-green', 'button-small' ],
+            handlers: {
+                click: event => appendInputGroup(emailsContainer, 'email', null, safeEmailId++, event.target),
+            },
+        });
+
+
+        // edit numbers
+        const numbersContainer = appendNode(editContactForm, 'div');
+
+        appendNodeWithText(numbersContainer, 'h3', 'Nummer:');
+
+        let safeNumberId = numbers.size ? Math.max( ...numbers.keys() ) + 1 : 1;
+
+        for (let [id, number] of numbers) {
+
+            appendInputGroup(numbersContainer, 'number', number, id);
+
+        }
+
+        appendNodeWithText(numbersContainer, 'button', '+', {
+            id: 'add-contact-numer',
+            class: [ 'button-green', 'button-small' ],
+            type: 'button',
+            handlers: {
+                click: event => appendInputGroup(numbersContainer, 'number', null, safeNumberId++, event.target),
+            },
+        });
+
+        // save changes button
+        appendNodeWithText(editContactForm, 'button', 'Spara ändringar', {
+            id: 'update-contact-button',
+            class: [ 'button-green', 'big-button' ],
+        });
+
+        // render contact history
+        editContactForm.appendChild(getContactHistory(contact));
+
+        return editContactForm;
+
     }
 }
 
-function addEmailInput(emailsContainer) {
 
-	const emailRow = appendNode(emailsContainer, 'div');
 
-	appendNodeWithText(emailRow, 'button', 'X', {
-		id: `remove-email-${idCounter++}`,
-		handlers: {
-			click: () => emailsContainer.removeChild(emailRow),
-		},
-	});
+// ----------- HELPER FUNCTIONS -------------------------
 
-	const input = appendNode(emailRow, 'input', {
-		type: 'text',
-        class: 'contact-email-input',
-        placeholder: 'Skriv e-post...'
+function readAndUpdateContact(contact) {
+
+    const newContact = readFormData();
+
+    updateContact(contact, newContact);
+
+}
+
+function getContactHistory(contact) {
+
+    const contactHistoryContainer = createElement('div');
+
+    appendNodeWithText(contactHistoryContainer, 'h2', 'Historik:');
+
+    const contactHistoryWrapper = appendNode(contactHistoryContainer, 'div');
+
+    contact.revisions.forEach((revision, index) => prependRevision(contactHistoryWrapper, revision, contact, index));
+
+    return contactHistoryContainer;
+
+}
+
+function prependRevision(target, revision, contact, index) {
+
+    let className = 'revision-container';
+
+    const isActive = revision === contact.current;
+
+    if (isActive) {
+
+        className = ['revision-container', 'revision-container-active'];
+
+    }
+
+    const revisionContainer = prependNode(target, 'div', {
+        class: className,
+        id: `revision-container-${index}`,
+        handlers: {
+            click: () => {
+                contact.activeIndex = index;
+                state.contacts = state.contacts;
+            },
+        },
     });
-    
-    input.focus();
+
+    const contactElement = renderContactBasicView(revision, true, true, index, isActive);
+
+    revisionContainer.appendChild(contactElement);
 
 }
 

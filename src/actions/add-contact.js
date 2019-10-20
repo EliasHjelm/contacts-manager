@@ -5,6 +5,7 @@ function addContact(contact) {
 
     state.contacts = [ ...state.contacts, contact ];
 
+    // go back to start page after adding a contact
     navigate('/');
 
 }

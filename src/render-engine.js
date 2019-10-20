@@ -1,12 +1,10 @@
 import startPage from './views/start-page';
-import contactPage from './views/contact-page';
 import newContactPage from './views/new-contact-page';
 import editContactPage from './views/edit-contact-page';
 import notFound from './views/not-found';
 
 const pagesDictionary = {
 	startPage,
-	contactPage,
 	newContactPage,
 	editContactPage,
 };
