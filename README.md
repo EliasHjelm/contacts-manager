@@ -1,6 +1,6 @@
 # Hello!
 
-Welcome to this glorious contacts organizer. It let's you save and edit contacts with name, email(s) and number(s) and view the full edit history for these contacts. The project is written entirely in vanilla JavaScript, with the assistance of webpack. The aim of the project was to implement a somewhat declarative approach to rendering and routing without the assistance of frameworks, and in that regard it can be considered successful.
+Welcome to this glorious contacts organizer. It let's you save and edit contacts with name, email(s) and number(s) and view the full edit history for these contacts. The project is a school assignment, and is written entirely in vanilla JavaScript, with the assistance of webpack. The aim of the project was to implement a somewhat declarative approach to rendering and routing without the assistance of frameworks, and in that regard it can be considered successful.
 
 ## How to
 
